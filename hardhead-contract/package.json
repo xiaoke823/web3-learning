@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "yarn": "^1.22.22"
+  },
+  "name": "hardhead-contract",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "hardhat": "^3.1.7"
+  }
+}
