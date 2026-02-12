@@ -1,12 +1,17 @@
 {
-  "dependencies": {
-    "yarn": "^1.22.22"
-  },
   "name": "hardhead-contract",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
   "devDependencies": {
-    "hardhat": "^3.1.7"
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.17"
   }
 }
