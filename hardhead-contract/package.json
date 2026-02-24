@@ -12,6 +12,10 @@
   "type": "commonjs",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "hardhat": "^2.22.17"
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.3.0",
+    "hardhat": "^2.22.17",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }
