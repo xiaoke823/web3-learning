@@ -6,6 +6,11 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | ethers.JsonRpcProvider>();
   const [signer, setSigner] = useState<ethers.JsonRpcSigner>();
+  const [balance1,setBalance1] = useState<string>('0');
+  const [balance2,setBalance2] = useState<string>('0');
+  const [blockNum, setBlockNum] = useState<number>(0)
+  const [transactionCount, setTransactionCount] = useState<number>(0)
+
   useEffect(() => {
     let signer = null;
 
@@ -20,6 +25,7 @@ export default function Home() {
         // so they only have read-only access
         console.log("MetaMask not installed; using read-only defaults")
         provider = ethers.getDefaultProvider()
+        
         setProvider(provider);
 
       } else {
@@ -29,6 +35,8 @@ export default function Home() {
         // requests through MetaMask.
         provider = new ethers.BrowserProvider((window as any).ethereum)
         setProvider(provider);
+        const network = await provider.getNetwork()
+        console.log('network',network)
         // It also provides an opportunity to request access to write
         // operations, which will be performed by the private key
         // that MetaMask manages for the user.
@@ -61,7 +69,7 @@ export default function Home() {
     // When sending a transaction, the value is in wei, so parseEther
     // converts ether to wei.
     const tx = await signer?.sendTransaction({
-      to: "0x2C39704f3504ac2CF45Ad2D9C048c524FDd86D9A",
+      to: "0x2fc90dF00B468e8335b9cd0C68D3788d2A776dFe",
       value: parseEther("0.0001")
     });
 
@@ -69,6 +77,29 @@ export default function Home() {
     const receipt = await tx?.wait();
     console.log('receipt', receipt);
   }
+
+  async function getBalance() {
+    // 查询指定的钱包地址
+    const balance1 = await provider?.getBalance('0x2C39704f3504ac2CF45Ad2D9C048c524FDd86D9A')
+    const balance2 = await provider?.getBalance(signer?.address||'')
+    setBalance1(formatEther(balance1) || '0')
+    setBalance2(formatEther(balance2) || '0')
+  }
+  
+  async function getBlockNumber() {
+    const blockNum = await provider?.getBlockNumber();
+    console.log('blockNum',blockNum)
+    setBlockNum(blockNum || 0)
+  }
+
+  // 获取交易次数，防止重复交易
+  async function getTransactionCount() {
+    // Get the next nonce required to send a transaction
+    const transactionCount = await provider?.getTransactionCount('0x2C39704f3504ac2CF45Ad2D9C048c524FDd86D9A')
+    console.log('transactionCount',transactionCount)
+    setTransactionCount(transactionCount || 0)
+  }
+
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
       <div>hello world</div>
@@ -79,6 +110,17 @@ export default function Home() {
       <div>formatEth:{formatEth}</div>
       <div>formatFeePerGas:{formatFeePerGas}</div>
       <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={sendTransaction}>sendTransaction</button>
+      <br/>
+      <br/>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={getBalance}>getBalance</button>
+      <div>balance1:{balance1}</div>
+      <div>balance2:{balance2}</div>
+      <br/>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={getBlockNumber}>getBlockNumber</button>
+      <div>blockNum:{blockNum}</div>
+      <br/>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={getTransactionCount}>getTransactionCount</button>
+      <div>transactionCount:{transactionCount}</div>
     </div>
   );
 }
